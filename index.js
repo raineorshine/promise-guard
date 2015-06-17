@@ -1,7 +1,7 @@
 var Promise = require('bluebird')
 var id = function(x) { return x }
 
-function guardPromise(promise, filter, map) {
+function guardPromise(promise, map, filter) {
 
   if(!promise) {
     throw new Error('No promise provided')
@@ -10,7 +10,7 @@ function guardPromise(promise, filter, map) {
     throw new Error('Received non-thenable')
   }
 
-  filter = filter || id
+  filter = filter || id.bind(null, true)
   map = map || id
 
   return Promise.resolve(promise).reflect()

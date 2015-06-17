@@ -1,9 +1,8 @@
 # guard-promise
 [![npm version](https://img.shields.io/npm/v/guard-promise.svg)](https://npmjs.org/package/guard-promise) 
-[![waffle.io issues](https://badge.waffle.io/metaraine/guard-promise.png?label=ready&title=waffle.io)](https://waffle.io/metaraine/guard-promise) 
 [![Build Status](https://travis-ci.org/metaraine/guard-promise.svg?branch=master)](https://travis-ci.org/metaraine/guard-promise)
 
-> Convert a promise to one that guards against certain rejections
+> Guard a promise against rejections
 
 
 ## Install
@@ -14,6 +13,11 @@ $ npm install --save guard-promise
 
 
 ## Usage
+
+`guardPromise(<promise>, <map>, <filter>)`
+
+- filter defaults to function() { return true }`
+- map defaults: `function(x) { return x }`
 
 ```js
 var guardPromise = require('guard-promise')

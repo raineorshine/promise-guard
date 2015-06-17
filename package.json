@@ -1,7 +1,7 @@
 {
   "name": "guard-promise",
   "version": "0.1.0",
-  "description": "Convert a promise to one that guards against certain rejections",
+  "description": "Guard a promise against rejections",
   "license": "ISC",
   "repository": "metaraine/guard-promise",
   "author": {
