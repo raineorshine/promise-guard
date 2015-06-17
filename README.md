@@ -16,8 +16,9 @@ $ npm install --save guard-promise
 
 `guardPromise(<promise>, <map>, <filter>)`
 
-- filter defaults to function() { return true }`
-- map defaults: `function(x) { return x }`
+- returns a promise which resolves to the same value as a given resolved <promise>, or resolves to `map(error)` if `filter(error)` returns true for a given rejected promise
+- <filter> defaults to `function() { return true }`
+- <map> defaults to `function(x) { return x }`
 
 ```js
 var guardPromise = require('guard-promise')
