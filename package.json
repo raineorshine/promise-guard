@@ -1,4 +1,20 @@
 {
+  "name": "guard-promise",
+  "version": "0.1.0",
+  "description": "Convert a promise to one that guards against certain rejections",
+  "license": "ISC",
+  "repository": "metaraine/guard-promise",
+  "author": {
+    "name": "Raine Lourie",
+    "url": "https://github.com/metaraine"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "keywords": [
+    "promise",
+    "guard"
+  ],
   "scripts": {
     "test": "mocha"
   },
