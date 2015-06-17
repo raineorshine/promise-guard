@@ -39,8 +39,8 @@ guardPromise(
 `guardPromise.all` is shorthand for:
 
 ```js
-Promise.all(<promises>.map(function(p) { 
-	return guardPromise(p, <map>, filter>) 
+Promise.all(<promises>.map(function(p, i) { 
+	return guardPromise(p, <map>, <filter>, i) 
 })
 ```
 
@@ -48,7 +48,17 @@ Promise.all(<promises>.map(function(p) {
 // resolves to [1,2,null]
 guardPromise.all(
 	[Promise.resolve(1), Promise.resolve(2), Promise.reject(3)]
-	function(reason) { return null }
+	function(reason, i) { return null }
+)
+```
+
+`guardPromise.props` works similarly for objects of promises:
+
+```js
+// resolves to { a:1, b:2 }
+guardPromise.all(
+	{ a: Promise.resolve(1), b: Promise.reject(3) },
+	function(reason, key) { return null }
 )
 ```
 

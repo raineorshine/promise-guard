@@ -43,10 +43,42 @@ describe('guardPromise', function() {
     return guardPromise(Promise.reject(1))
     .should.eventually.eql(1)
   })
+})
 
-  it('can be used to settle multiple promises', function() {
+describe('guardPromise.all', function() {
+  it('should settle arrays of promises', function() {
   	return guardPromise.all([Promise.resolve(1), Promise.resolve(2), Promise.reject(3)])
   	.should.eventually.eql([1,2,3])
   })
+  it('should pass the key', function() {
+  	return guardPromise.all([Promise.resolve('a'), Promise.resolve('b'), Promise.reject('c')], function(reason, key) { return key})
+  	.should.eventually.eql(['a', 'b', 2])
+  })
+})
 
+describe('guardPromise.prop', function() {
+  it('should settle objects of promises', function() {
+  	return guardPromise.props({
+  		one: Promise.resolve(1),
+  		two: Promise.resolve(2),
+  		three: Promise.reject(3)
+  	})
+  	.should.eventually.eql({
+  		one: 1,
+  		two: 2,
+  		three: 3
+  	})
+  })
+  it('should pass the key', function() {
+  	return guardPromise.props({
+  		one: Promise.resolve(1),
+  		two: Promise.resolve(2),
+  		three: Promise.reject(3)
+  	}, function(reason, key) { return key })
+  	.should.eventually.eql({
+  		one: 1,
+  		two: 2,
+  		three: 'three'
+  	})
+  })
 })
