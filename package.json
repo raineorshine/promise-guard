@@ -13,8 +13,7 @@
   },
   "keywords": [
     "promise",
-    "catch",
-    "guard"
+    "catch"
   ],
   "scripts": {
     "test": "mocha"
