@@ -56,7 +56,7 @@ guardPromise.all(
 `guardPromise.props` works similarly for objects of promises:
 
 ```js
-// resolves to { a:1, b:2 }
+// resolves to { a:1, b:null }
 guardPromise.all(
 	{ a: Promise.resolve(1), b: Promise.reject(3) },
 	function(error, key) { return null }
