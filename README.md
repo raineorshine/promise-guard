@@ -1,63 +1,47 @@
-# guard-promise
-[![npm version](https://img.shields.io/npm/v/guard-promise.svg)](https://npmjs.org/package/guard-promise)
-[![Build Status](https://travis-ci.org/metaraine/guard-promise.svg?branch=master)](https://travis-ci.org/metaraine/guard-promise)
+# catch-some
+[![npm version](https://img.shields.io/npm/v/catch-some.svg)](https://npmjs.org/package/catch-some)
+[![Build Status](https://travis-ci.org/metaraine/catch-some.svg?branch=master)](https://travis-ci.org/metaraine/catch-some)
 
-> Guard a promise against rejections
+> Catch *some* Promise rejections
 
 
 ## Install
 
 ```sh
-$ npm install --save guard-promise
+$ npm install --save catch-some
 ```
 
 
 ## Usage
 
-`guardPromise(<promise>, <map>, <filter>)`
+`catchSome(<promises>, <map>, <filter>)`
 
-- returns a promise which resolves to the same value as a given resolved `<promise>`, or resolves to `map(error)` if `filter(error)` returns true for a given rejected `<promise>`
-- `<filter>` defaults to `function() { return true }`
+Given an array or object of promises, attemps to resolve them to an array or object of the resolved values. Converts rejected promises for which `filter(error)` is true, to resolved values of `map(error)`. Returns a rejected promise (only) if any rejection does not pass the filter.
+
+```js
+var catchSome = require('catch-some')
+
+// resolves to [1,-1]
+catchSome(
+  [Promise.resolve(1), Promise.reject(2)],
+  function(error, i) { return -1 },
+  function(error, i) { return error > 0 }
+)
+```
+
 - `<map>` defaults to `function(x) { return x }`
+- `<filter>` defaults to `function() { return true }`
 
 ```js
-var guardPromise = require('guard-promise')
-
-// resolves to 'hi'
-guardPromise(
-  Promise.reject({ statusCode: 404, default: 'hi' }),
-  function(error) { return error.default },
-  function(error) { return error.statusCode === 404 }
-)
-
-// resolve any rejected promise to null
-guardPromise(
-  Promise.reject('blah'}),
-  function() { return null }
-)
+// resolves to [1,2,3]
+catchSome([Promise.resolve(1), Promise.resolve(2), Promise.reject(3)])
 ```
 
-`guardPromise.all` is shorthand for:
-
-```js
-Promise.all(<promises>.map(function(p, i) {
-	return guardPromise(p, <map>, <filter>, i)
-})
-```
-
-```js
-// resolves to [1,2,null]
-guardPromise.all(
-	[Promise.resolve(1), Promise.resolve(2), Promise.reject(3)]
-	function(error, i) { return null }
-)
-```
-
-`guardPromise.props` works similarly for objects of promises:
+`catchSome.props` works similarly for objects of promises:
 
 ```js
 // resolves to { a:1, b:null }
-guardPromise.all(
+catchSome(
 	{ a: Promise.resolve(1), b: Promise.reject(3) },
 	function(error, key) { return null }
 )

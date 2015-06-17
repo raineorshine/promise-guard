@@ -13,39 +13,32 @@ function guardPromise(promise, map, filter, passThrough) {
   filter = filter || id.bind(null, true)
   map = map || id
 
-  return Promise.resolve(promise).reflect()
-  .then(function(inspection) {
-    if(inspection.isRejected()) {
-      var reason = inspection.reason()
-      if(filter(reason, passThrough)) {
-        return map(reason, passThrough)
-      }
-      else {
-        throw reason
-      }
-    }
-    else {
-      return inspection.value()
-    }
-  });
+  return Promise.resolve(promise)
+	  .catch(function(e) {
+	  	if(filter(e, passThrough)) {
+	  		return map(e, passThrough)
+	  	}
+	  	else {
+	  		throw e
+	  	}
+	  })
 }
 
-function all(promiseArray, map, filter) {
-	return Promise.all(promiseArray.map(function(promise, i) {
-		return guardPromise(promise, map, filter, i)
-	}))
-}
+function catchSome(promises, map, filter) {
 
-function props(promiseObj, map, filter) {
-
-	var guarded = {}
-	for(var key in promiseObj) {
-		guarded[key] = guardPromise(promiseObj[key], map, filter, key);
+	if(Array.isArray(promises)) {
+		return Promise.all(promises.map(function(promise, i) {
+			return guardPromise(promise, map, filter, i)
+		}))
 	}
+	else {
+		var guarded = {}
+		for(var key in promises) {
+			guarded[key] = guardPromise(promises[key], map, filter, key);
+		}
 
-	return Promise.props(guarded)
+		return Promise.props(guarded)
+	}
 }
 
-module.exports = guardPromise
-module.exports.all = all
-module.exports.props = props
+module.exports = catchSome

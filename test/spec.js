@@ -3,63 +3,56 @@ var should = chai.should()
 var chaiAsPromised = require('chai-as-promised')
 var _ = require('lodash')
 var Promise = require('bluebird')
-var guardPromise = require('../index')
+var catchSome = require('../index')
 
 chai.use(chaiAsPromised)
 
-describe('guardPromise', function() {
+describe('catchSome', function() {
 
   it('should not affect promises that resolve', function() {
-    guardPromise(Promise.resolve(1), _.partial(_.identity, null), function(error) {
-      return error.statusCode === 404
-    })
-    .should.eventually.equal(1)
+    return catchSome(
+    	[Promise.resolve(1), Promise.resolve(2)],
+    	_.partial(_.identity, null),
+    	function(error) { return error.statusCode === 404 }
+    ).should.eventually.eql([1, 2])
   })
 
   it('should not affect rejected promises that are not matched by the filter function', function() {
-    guardPromise(
-    	Promise.reject(1),
+    return catchSome(
+    	[Promise.reject(1)],
     	_.partial(_.identity, 2),
     	function(error) { return error === 404 }
     ).should.be.rejected;
   })
 
-  it('should convert matched rejected promises to the result of the processor function', function() {
-  	return guardPromise(
-      Promise.reject({ statusCode: 404 }),
+  it('should convert matched rejected promises to the result of the mapping function', function() {
+  	return catchSome(
+      [Promise.reject({ statusCode: 404 })],
       _.partial(_.identity, 2),
       function(error) { return error.statusCode === 404 }
-    ).should.eventually.equal(2)
+    ).should.eventually.eql([2])
   })
 
-  it('should use an always(true) function if a filter function is not provided', function() {
-    return guardPromise(
-      Promise.reject({ statusCode: 404, default: 'hi' }),
+  it('should use an always(true) function to resolve all rejections if a filter function is not provided', function() {
+    return catchSome(
+      [Promise.reject({ statusCode: 404, default: 'hi' })],
       function(error) { return error.default }
     )
-    .should.eventually.eql('hi')
+    .should.eventually.eql(['hi'])
   })
 
   it('should use the identify function if a mapping function is not provided', function() {
-    return guardPromise(Promise.reject(1))
-    .should.eventually.eql(1)
+    return catchSome([Promise.reject(1)])
+    .should.eventually.eql([1])
   })
-})
 
-describe('guardPromise.all', function() {
-  it('should settle arrays of promises', function() {
-  	return guardPromise.all([Promise.resolve(1), Promise.resolve(2), Promise.reject(3)])
-  	.should.eventually.eql([1,2,3])
-  })
   it('should pass the key', function() {
-  	return guardPromise.all([Promise.resolve('a'), Promise.resolve('b'), Promise.reject('c')], function(error, key) { return key})
+  	return catchSome([Promise.resolve('a'), Promise.resolve('b'), Promise.reject('c')], function(error, key) { return key})
   	.should.eventually.eql(['a', 'b', 2])
   })
-})
 
-describe('guardPromise.prop', function() {
-  it('should settle objects of promises', function() {
-  	return guardPromise.props({
+  it('should work on objects of promises', function() {
+  	return catchSome({
   		one: Promise.resolve(1),
   		two: Promise.resolve(2),
   		three: Promise.reject(3)
@@ -70,8 +63,9 @@ describe('guardPromise.prop', function() {
   		three: 3
   	})
   })
-  it('should pass the key', function() {
-  	return guardPromise.props({
+
+  it('should pass the key when called on objects', function() {
+  	return catchSome({
   		one: Promise.resolve(1),
   		two: Promise.resolve(2),
   		three: Promise.reject(3)
@@ -82,4 +76,5 @@ describe('guardPromise.prop', function() {
   		three: 'three'
   	})
   })
+
 })
