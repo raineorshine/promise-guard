@@ -36,6 +36,22 @@ guardPromise(
 )
 ```
 
+`guardPromise.all` is shorthand for:
+
+```js
+Promise.all(<promises>.map(function(p) { 
+	return guardPromise(p, <map>, filter>) 
+})
+```
+
+```js
+// resolves to [1,2,null]
+guardPromise.all(
+	[Promise.resolve(1), Promise.resolve(2), Promise.reject(3)]
+	function(reason) { return null }
+)
+```
+
 
 ## License
 

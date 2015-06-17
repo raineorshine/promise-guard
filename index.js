@@ -30,4 +30,11 @@ function guardPromise(promise, map, filter) {
   });
 }
 
+function all(promises, map, filter) {
+	return Promise.all(promises.map(function(promise) {
+		return guardPromise(promise, map, filter)
+	}))
+}
+
 module.exports = guardPromise
+module.exports.all = all

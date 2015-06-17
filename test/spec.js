@@ -44,4 +44,9 @@ describe('guardPromise', function() {
     .should.eventually.eql(1)
   })
 
+  it('can be used to settle multiple promises', function() {
+  	return guardPromise.all([Promise.resolve(1), Promise.resolve(2), Promise.reject(3)])
+  	.should.eventually.eql([1,2,3])
+  })
+
 })
