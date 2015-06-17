@@ -1,9 +1,9 @@
 {
-  "name": "catch-some",
+  "name": "promise-guard",
   "version": "0.1.0",
-  "description": "Catch *some* Promise rejections",
+  "description": "Resolve a collection of Promises while guarding against certain rejections",
   "license": "ISC",
-  "repository": "metaraine/catch-some",
+  "repository": "metaraine/promise-guard",
   "author": {
     "name": "Raine Lourie",
     "url": "https://github.com/metaraine"
@@ -13,7 +13,9 @@
   },
   "keywords": [
     "promise",
-    "catch"
+    "catch",
+    "guard",
+    "error"
   ],
   "scripts": {
     "test": "mocha"

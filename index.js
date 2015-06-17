@@ -1,7 +1,8 @@
 var Promise = require('bluebird')
 var id = function(x) { return x }
 
-function guardPromise(promise, map, filter, passThrough) {
+// guard a single promise
+function guard(promise, map, filter, passThrough) {
 
   if(!promise) {
     throw new Error('No promise provided')
@@ -24,21 +25,22 @@ function guardPromise(promise, map, filter, passThrough) {
 	  })
 }
 
-function catchSome(promises, map, filter) {
+// guard an array or object of promises
+function promiseGuard(promises, map, filter) {
 
 	if(Array.isArray(promises)) {
 		return Promise.all(promises.map(function(promise, i) {
-			return guardPromise(promise, map, filter, i)
+			return guard(promise, map, filter, i)
 		}))
 	}
 	else {
 		var guarded = {}
 		for(var key in promises) {
-			guarded[key] = guardPromise(promises[key], map, filter, key);
+			guarded[key] = guard(promises[key], map, filter, key);
 		}
 
 		return Promise.props(guarded)
 	}
 }
 
-module.exports = catchSome
+module.exports = promiseGuard
