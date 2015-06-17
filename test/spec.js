@@ -1,10 +1,11 @@
-var chai = require('chai');
-var should = chai.should();
-var chaiAsPromised = require('chai-as-promised');
-var guardPromise = require('../index');
+var chai = require('chai')
+var should = chai.should()
+var chaiAsPromised = require('chai-as-promised')
 var _ = require('lodash')
+var Promise = require('bluebird')
+var guardPromise = require('../index')
 
-chai.use(chaiAsPromised);
+chai.use(chaiAsPromised)
 
 describe('guardPromise', function() {
 
