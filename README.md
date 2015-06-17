@@ -16,7 +16,7 @@ $ npm install --save catch-some
 
 `catchSome(<promises>, <map>, <filter>)`
 
-Given an array or object of promises, attemps to resolve them to an array or object of the resolved values. Converts rejected promises for which `filter(error)` is true, to resolved values of `map(error)`. Returns a rejected promise (only) if any rejection does not pass the filter.
+Given an array or object of promises, attemps to resolve them to an array or object of the resolved values. Converts rejected promises for which `filter(error)` is true, to resolved values of `map(error)`. Returns a rejected promise if any rejection does not pass the filter.
 
 - `<map>` defaults to `function(x) { return x }`
 - `<filter>` defaults to `function() { return true }`
