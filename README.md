@@ -1,5 +1,5 @@
 # guard-promise
-[![npm version](https://img.shields.io/npm/v/guard-promise.svg)](https://npmjs.org/package/guard-promise) 
+[![npm version](https://img.shields.io/npm/v/guard-promise.svg)](https://npmjs.org/package/guard-promise)
 [![Build Status](https://travis-ci.org/metaraine/guard-promise.svg?branch=master)](https://travis-ci.org/metaraine/guard-promise)
 
 > Guard a promise against rejections
@@ -17,8 +17,8 @@ $ npm install --save guard-promise
 `guardPromise(<promise>, <map>, <filter>)`
 
 - returns a promise which resolves to the same value as a given resolved `<promise>`, or resolves to `map(error)` if `filter(error)` returns true for a given rejected `<promise>`
-- <filter> defaults to `function() { return true }`
-- <map> defaults to `function(x) { return x }`
+- `<filter>` defaults to `function() { return true }`
+- `<map>` defaults to `function(x) { return x }`
 
 ```js
 var guardPromise = require('guard-promise')
@@ -40,8 +40,8 @@ guardPromise(
 `guardPromise.all` is shorthand for:
 
 ```js
-Promise.all(<promises>.map(function(p, i) { 
-	return guardPromise(p, <map>, <filter>, i) 
+Promise.all(<promises>.map(function(p, i) {
+	return guardPromise(p, <map>, <filter>, i)
 })
 ```
 
