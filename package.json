@@ -1,6 +1,6 @@
 {
   "name": "promise-guard",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Resolve a collection of Promises while guarding against certain rejections",
   "license": "ISC",
   "repository": "metaraine/promise-guard",
