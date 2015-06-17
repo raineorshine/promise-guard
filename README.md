@@ -25,8 +25,8 @@ var guardPromise = require('guard-promise')
 // resolves to 'hi'
 guardPromise(
   Promise.reject({ statusCode: 404, default: 'hi' }),
-  function(reason) { return reason.default },
-  function(reason) { return reason.statusCode === 404 }
+  function(error) { return error.default },
+  function(error) { return error.statusCode === 404 }
 )
 
 // resolve any rejected promise to null
@@ -48,7 +48,7 @@ Promise.all(<promises>.map(function(p, i) {
 // resolves to [1,2,null]
 guardPromise.all(
 	[Promise.resolve(1), Promise.resolve(2), Promise.reject(3)]
-	function(reason, i) { return null }
+	function(error, i) { return null }
 )
 ```
 
@@ -58,7 +58,7 @@ guardPromise.all(
 // resolves to { a:1, b:2 }
 guardPromise.all(
 	{ a: Promise.resolve(1), b: Promise.reject(3) },
-	function(reason, key) { return null }
+	function(error, key) { return null }
 )
 ```
 

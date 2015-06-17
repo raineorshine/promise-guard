@@ -10,8 +10,8 @@ chai.use(chaiAsPromised)
 describe('guardPromise', function() {
 
   it('should not affect promises that resolve', function() {
-    guardPromise(Promise.resolve(1), _.partial(_.identity, null), function(reason) {
-      return reason.statusCode === 404
+    guardPromise(Promise.resolve(1), _.partial(_.identity, null), function(error) {
+      return error.statusCode === 404
     })
     .should.eventually.equal(1)
   })
@@ -20,7 +20,7 @@ describe('guardPromise', function() {
     guardPromise(
     	Promise.reject(1),
     	_.partial(_.identity, 2),
-    	function(reason) { return reason === 404 }
+    	function(error) { return error === 404 }
     ).should.be.rejected;
   })
 
@@ -28,14 +28,14 @@ describe('guardPromise', function() {
   	return guardPromise(
       Promise.reject({ statusCode: 404 }),
       _.partial(_.identity, 2),
-      function(reason) { return reason.statusCode === 404 }
+      function(error) { return error.statusCode === 404 }
     ).should.eventually.equal(2)
   })
 
   it('should use an always(true) function if a filter function is not provided', function() {
     return guardPromise(
       Promise.reject({ statusCode: 404, default: 'hi' }),
-      function(reason) { return reason.default }
+      function(error) { return error.default }
     )
     .should.eventually.eql('hi')
   })
@@ -52,7 +52,7 @@ describe('guardPromise.all', function() {
   	.should.eventually.eql([1,2,3])
   })
   it('should pass the key', function() {
-  	return guardPromise.all([Promise.resolve('a'), Promise.resolve('b'), Promise.reject('c')], function(reason, key) { return key})
+  	return guardPromise.all([Promise.resolve('a'), Promise.resolve('b'), Promise.reject('c')], function(error, key) { return key})
   	.should.eventually.eql(['a', 'b', 2])
   })
 })
@@ -75,7 +75,7 @@ describe('guardPromise.prop', function() {
   		one: Promise.resolve(1),
   		two: Promise.resolve(2),
   		three: Promise.reject(3)
-  	}, function(reason, key) { return key })
+  	}, function(error, key) { return key })
   	.should.eventually.eql({
   		one: 1,
   		two: 2,
